@@ -5,7 +5,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Alert} from 'react-native';
 // import { signin } from '../firebase';
-import {TButton} from '../components'; //, Image, Input, ErrorMessage
+import {TButton, PImage} from '../components'; // , Input, ErrorMessage
 // import { validateEmail, removeWhitespace } from '../utils';
 // import { UserContext, ProgressContext } from '../contexts';
 
@@ -24,11 +24,15 @@ const StyledText = styled.Text`
    color: #111111;
 `;
 
+const LOGO =
+   'https://firebasestorage.googleapis.com/v0/b/rn-chat-aba36.appspot.com/o/logo.png?alt=media';
+
 const Signin = ({navigation}) => {
    const insets = useSafeAreaInsets();
    const theme = useContext(ThemeContext);
    return (
       <Container insets={insets}>
+         <PImage url={LOGO} />
          <StyledText>로그인</StyledText>
          <TButton
             title="로그인"
