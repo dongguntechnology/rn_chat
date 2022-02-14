@@ -3,7 +3,6 @@ import {ThemeContext} from 'styled-components/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {MaterialIcons} from '@expo/vector-icons';
 import {Signin, Signup} from '../screens'; //, Profile
-import theme from '../theme';
 
 const Stack = createStackNavigator();
 

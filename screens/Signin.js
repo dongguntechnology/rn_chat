@@ -3,9 +3,9 @@ import {ThemeContext} from 'styled-components/native';
 import styled from 'styled-components/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Alert, Button} from 'react-native';
+import {Alert} from 'react-native';
 // import { signin } from '../firebase';
-//import {Button, Image, Input, ErrorMessage} from '../components';
+import {TButton} from '../components'; //, Image, Input, ErrorMessage
 // import { validateEmail, removeWhitespace } from '../utils';
 // import { UserContext, ProgressContext } from '../contexts';
 
@@ -26,12 +26,19 @@ const StyledText = styled.Text`
 
 const Signin = ({navigation}) => {
    const insets = useSafeAreaInsets();
+   const theme = useContext(ThemeContext);
    return (
       <Container insets={insets}>
          <StyledText>로그인</StyledText>
-         <Button
+         <TButton
+            title="로그인"
+            onPress={() => navigation.navigate('Signin')}
+         />
+         <TButton
             title="회원가입"
             onPress={() => navigation.navigate('Signup')}
+            containerStyle={{marginTop: 0, backgroundColor: 'transparent'}}
+            textStyle={{color: theme.btnTextLink, fontSize: 18}}
          />
       </Container>
    );
