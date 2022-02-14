@@ -1,9 +1,9 @@
 import React from 'react';
 import {StatusBar} from 'react-native';
 import {ThemeProvider} from 'styled-components/native';
-//import Navigation from './navigations';
+import Navigation from '../navigations';
 import {theme} from '../theme';
-//import {UserProvider, ProgressProvider} from './contexts';
+//import {UserProvider, ProgressProvider} from '../contexts';
 
 const App = () => {
    return (
@@ -12,6 +12,7 @@ const App = () => {
             backgroundColor={theme.background}
             barStyle="dark-content"
          />
+         <Navigation />
       </ThemeProvider>
    );
 };
