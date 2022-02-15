@@ -1,30 +1,82 @@
-import React, {useState, useRef, useEffect, useContext} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import styled from 'styled-components/native';
+import {TButton, PImage, Input} from '../components'; // , ErrorMessage
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Alert, Button} from 'react-native';
-//import {Button, Image, Input, ErrorMessage} from '../components';
-// import {signup} from '../firebase';
-// import {validateEmail, removeWhitespace} from '../utils';
-// import {UserContext, ProgressContext} from '../contexts';
+// import {Alert} from 'react-native';
+// import { signin } from '../firebase';
+// import { validateEmail, removeWhitespace } from '../utils';
+// import { UserContext, ProgressContext } from '../contexts';
 
 const Container = styled.View`
    flex: 1;
    justify-content: center;
    align-items: center;
    background-color: ${({theme}) => theme.background};
-   padding: 0 20px;
-`;
-
-const StyledText = styled.Text`
-   font-size: 30px;
-   color: #111111;
+   padding: 50px 20px;
 `;
 
 const Signup = () => {
+   //const [photo, setPhoto] = useState(DEFAULT_PHOTO);
+   const [name, setName] = useState('');
+   const [email, setEmail] = useState('');
+   const [password, setPassword] = useState('');
+   const [passwordConfirm, setPasswordConfirm] = useState('');
+
+   const refEmail = useRef(null);
+   const refPassword = useRef(null);
+   const refPasswordConfirm = useRef(null);
+   // const refDidMount = useRef(null);
+
+   const _handleSignupBtnPress = () => {
+      console.log('회원가입');
+   };
+
    return (
-      <Container>
-         <StyledText>회원가입</StyledText>
-      </Container>
+      <KeyboardAwareScrollView extraScrollHeight={30}>
+         <Container>
+            <PImage />
+            <Input
+               label="이름"
+               placeholder="Name"
+               returnKeyType="next"
+               value={name}
+               onChangeText={setName}
+               // 메일입력후에 Input.js 의 암호입력란으로 포커스를 자동으로 옮김
+               onSubmitEditing={() => refEmail.current.focus()}
+            />
+            <Input
+               ref={refEmail}
+               label="메일주소"
+               placeholder="Email"
+               returnKeyType="next"
+               value={email}
+               onChangeText={setEmail}
+               // 메일입력후에 Input.js 의 암호입력란으로 포커스를 자동으로 옮김
+               onSubmitEditing={() => refPassword.current.focus()}
+            />
+            <Input
+               ref={refPassword}
+               label="암호"
+               placeholder="Password"
+               returnKeyType="done"
+               value={password}
+               onChangeText={setPassword}
+               isPassword={true}
+               onSubmitEditing={() => refPasswordConfirm.current.focus()}
+            />
+            <Input
+               ref={refPasswordConfirm}
+               label="암호확인"
+               placeholder="PasswordConfirm"
+               returnKeyType="done"
+               value={passwordConfirm}
+               onChangeText={setPasswordConfirm}
+               isPassword={true}
+               onSubmitEditing={_handleSignupBtnPress}
+            />
+            <TButton title="가입하기" onPress={_handleSignupBtnPress} />
+         </Container>
+      </KeyboardAwareScrollView>
    );
 };
 

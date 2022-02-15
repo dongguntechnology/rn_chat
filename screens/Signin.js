@@ -35,35 +35,40 @@ const Signin = ({navigation}) => {
    };
 
    return (
-      <Container insets={insets}>
-         <PImage url={LOGO} />
-         <Input
-            label="Email"
-            placeholder="Email"
-            returnKeyType="next"
-            value={email}
-            onChangeText={setEmail}
-            // 메일입력후에 Input.js 의 암호입력란으로 포커스를 자동으로 옮김
-            onSubmitEditing={() => refPassword.current.focus()}
-         />
-         <Input
-            ref={refPassword}
-            label="Password"
-            placeholder="Password"
-            returnKeyType="done"
-            value={password}
-            onChangeText={setPassword}
-            isPassword={true}
-            onSubmitEditing={_handleSigninBtnPress}
-         />
-         <TButton title="로그인" onPress={_handleSigninBtnPress} />
-         <TButton
-            title="회원가입"
-            onPress={() => navigation.navigate('Signup')}
-            containerStyle={{marginTop: 0, backgroundColor: 'transparent'}}
-            textStyle={{color: theme.btnTextLink, fontSize: 18}}
-         />
-      </Container>
+      <KeyboardAwareScrollView
+         extraScrollHeight={20}
+         contentContainerStyle={{flex: 1}}
+      >
+         <Container insets={insets}>
+            <PImage url={LOGO} />
+            <Input
+               label="메일주소"
+               placeholder="Email"
+               returnKeyType="next"
+               value={email}
+               onChangeText={setEmail}
+               // 메일입력후에 Input.js 의 암호입력란으로 포커스를 자동으로 옮김
+               onSubmitEditing={() => refPassword.current.focus()}
+            />
+            <Input
+               ref={refPassword}
+               label="암호"
+               placeholder="Password"
+               returnKeyType="done"
+               value={password}
+               onChangeText={setPassword}
+               isPassword={true}
+               onSubmitEditing={_handleSigninBtnPress}
+            />
+            <TButton title="로그인" onPress={_handleSigninBtnPress} />
+            <TButton
+               title="회원가입"
+               onPress={() => navigation.navigate('Signup')}
+               containerStyle={{marginTop: 0, backgroundColor: 'transparent'}}
+               textStyle={{color: theme.btnTextLink, fontSize: 18}}
+            />
+         </Container>
+      </KeyboardAwareScrollView>
    );
 };
 

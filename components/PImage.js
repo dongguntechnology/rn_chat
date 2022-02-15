@@ -25,6 +25,11 @@ const PImage = ({url}) => {
    );
 };
 
+//기본이미지 설정
+PImage.defaultProps = {
+   url: 'https://firebasestorage.googleapis.com/v0/b/rn-chat-1f941.appspot.com/o/face.png?alt=media&token=be67a9c9-0882-4b18-b91a-1650bfc0aeff',
+};
+
 PImage.propTypes = {
    url: PropTypes.string,
 };
