@@ -5,7 +5,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Alert} from 'react-native';
 // import { signin } from '../firebase';
-import {TButton, PImage} from '../components'; // , Input, ErrorMessage
+import {TButton, PImage, Input} from '../components'; // , ErrorMessage
 // import { validateEmail, removeWhitespace } from '../utils';
 // import { UserContext, ProgressContext } from '../contexts';
 
@@ -19,25 +19,44 @@ const Container = styled.View`
    padding-bottom: ${({insets: {bottom}}) => bottom}px;
 `;
 
-const StyledText = styled.Text`
-   font-size: 30px;
-   color: #111111;
-`;
-
 const LOGO =
    'https://firebasestorage.googleapis.com/v0/b/rn-chat-aba36.appspot.com/o/logo.png?alt=media';
 
 const Signin = ({navigation}) => {
    const insets = useSafeAreaInsets();
    const theme = useContext(ThemeContext);
+
+   const [email, setEmail] = useState('');
+   const [password, setPassword] = useState('');
+   const refPassword = useRef(null);
+
+   const _handleSigninBtnPress = () => {
+      console.log('로그인');
+   };
+
    return (
       <Container insets={insets}>
          <PImage url={LOGO} />
-         <StyledText>로그인</StyledText>
-         <TButton
-            title="로그인"
-            onPress={() => navigation.navigate('Signin')}
+         <Input
+            label="Email"
+            placeholder="Email"
+            returnKeyType="next"
+            value={email}
+            onChangeText={setEmail}
+            // 메일입력후에 Input.js 의 암호입력란으로 포커스를 자동으로 옮김
+            onSubmitEditing={() => refPassword.current.focus()}
          />
+         <Input
+            ref={refPassword}
+            label="Password"
+            placeholder="Password"
+            returnKeyType="done"
+            value={password}
+            onChangeText={setPassword}
+            isPassword={true}
+            onSubmitEditing={_handleSigninBtnPress}
+         />
+         <TButton title="로그인" onPress={_handleSigninBtnPress} />
          <TButton
             title="회원가입"
             onPress={() => navigation.navigate('Signup')}
