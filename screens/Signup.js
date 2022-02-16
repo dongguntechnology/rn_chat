@@ -15,8 +15,12 @@ const Container = styled.View`
    padding: 50px 20px;
 `;
 
+const DEFAULT_PHOTO =
+   'https://firebasestorage.googleapis.com/v0/b/rn-chat-aba36.appspot.com/o/face.png?alt=media';
+
 const Signup = () => {
-   //const [photo, setPhoto] = useState(DEFAULT_PHOTO);
+   const [photo, setPhoto] = useState(DEFAULT_PHOTO);
+   // DEFAULT_PHOTO = PImage.defaultProps
    const [name, setName] = useState('');
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
@@ -34,7 +38,7 @@ const Signup = () => {
    return (
       <KeyboardAwareScrollView extraScrollHeight={30}>
          <Container>
-            <PImage />
+            <PImage showButton={true} url={photo} onChangePhoto={setPhoto} />
             <Input
                label="이름"
                placeholder="Name"
