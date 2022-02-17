@@ -33,14 +33,21 @@ const Signin = ({navigation}) => {
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
    const [errorMessage, setErrorMessage] = useState('');
+   const [disabled, setDisabled] = useState(true);
    const refPassword = useRef(null);
+
+   // TButton 의 활성화 여부를 결정하는 disabled 상태변수의 값을 변경
+   useEffect(() => {
+      setDisabled(!(email && password && !errorMessage));
+      console.log(disabled);
+   }, [email, password, errorMessage]);
 
    // 입력된 이메일주소내 공백제거
    const _handleEmailChange = (email) => {
       const changedEmail = removeWhitespace(email);
       setEmail(changedEmail);
       setErrorMessage(
-         validateEmail(changedEmail) ? '' : 'Please verify your email'
+         validateEmail(changedEmail) ? '' : '이메일형식에 맞게 입력하세요'
       );
    };
 
@@ -80,6 +87,7 @@ const Signin = ({navigation}) => {
                // 메일입력후에 Input.js 의 암호입력란으로 포커스를 자동으로 옮김
                onSubmitEditing={() => refPassword.current.focus()}
             />
+            <ErrorMessage message={errorMessage} />
             <Input
                ref={refPassword}
                label="암호"
@@ -90,8 +98,11 @@ const Signin = ({navigation}) => {
                isPassword={true}
                onSubmitEditing={_handleSigninBtnPress}
             />
-            <ErrorMessage message={errorMessage} />
-            <TButton title="로그인" onPress={_handleSigninBtnPress} />
+            <TButton
+               title="로그인"
+               onPress={_handleSigninBtnPress}
+               disabled={disabled}
+            />
             <TButton
                title="회원가입"
                onPress={() => navigation.navigate('Signup')}

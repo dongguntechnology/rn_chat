@@ -11,17 +11,22 @@ const Container = styled.View`
    justify-content: center;
    align-items: center;
    border-radius: 4px;
+   opacity: ${({disabled}) => (disabled ? 0.5 : 1)};
 `;
 const Title = styled.Text`
    font-size: 24px;
    color: ${({theme}) => theme.btnTitle};
 `;
 
-const TButton = ({title, onPress, containerStyle, textStyle}) => {
-   //, disabled
+const TButton = ({title, onPress, containerStyle, textStyle, disabled}) => {
+   //
    return (
-      <TouchableOpacity onPress={onPress} style={{flexDirection: 'row'}}>
-         <Container style={containerStyle}>
+      <TouchableOpacity
+         onPress={onPress}
+         style={{flexDirection: 'row'}}
+         disabled={disabled}
+      >
+         <Container style={containerStyle} disabled={disabled}>
             <Title style={textStyle}>{title}</Title>
          </Container>
       </TouchableOpacity>
@@ -33,6 +38,7 @@ TButton.propTypes = {
    onPress: PropTypes.func.isRequired,
    containerStyle: PropTypes.object,
    textStyle: PropTypes.object,
+   disabled: PropTypes.bool,
 };
 
 export default TButton;
