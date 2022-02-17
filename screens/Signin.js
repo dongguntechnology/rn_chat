@@ -90,7 +90,7 @@ const Signin = ({navigation}) => {
                isPassword={true}
                onSubmitEditing={_handleSigninBtnPress}
             />
-            <ErrorMessage message="" />
+            <ErrorMessage message={errorMessage} />
             <TButton title="로그인" onPress={_handleSigninBtnPress} />
             <TButton
                title="회원가입"
