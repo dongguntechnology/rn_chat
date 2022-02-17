@@ -4,10 +4,14 @@ import styled from 'styled-components/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Alert} from 'react-native';
-// import { signin } from '../firebase';
-import {TButton, PImage, Input} from '../components'; // , ErrorMessage
-// import { validateEmail, removeWhitespace } from '../utils';
+import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
+import {app} from '../firebase';
+import {TButton, PImage, Input, ErrorMessage} from '../components';
+import {validateEmail, removeWhitespace} from '../utils';
 // import { UserContext, ProgressContext } from '../contexts';
+
+// auth 생성
+const auth = getAuth(app);
 
 const Container = styled.View`
    flex: 1;
@@ -28,9 +32,35 @@ const Signin = ({navigation}) => {
 
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
+   const [errorMessage, setErrorMessage] = useState('');
    const refPassword = useRef(null);
 
-   const _handleSigninBtnPress = () => {
+   // 입력된 이메일주소내 공백제거
+   const _handleEmailChange = (email) => {
+      const changedEmail = removeWhitespace(email);
+      setEmail(changedEmail);
+      setErrorMessage(
+         validateEmail(changedEmail) ? '' : 'Please verify your email'
+      );
+   };
+
+   // 입력된 암호내 공백제거
+   const _handlePasswordChange = (password) => {
+      setPassword(removeWhitespace(password));
+   };
+
+   const _handleSigninBtnPress = async () => {
+      try {
+         // spinner.start();
+         const {user} = await signInWithEmailAndPassword(auth, email, password);
+         console.log('333333 ', user);
+         navigation.navigate('Profile', {user});
+         // setUser(user);
+      } catch (e) {
+         Alert.alert('Signin Error', e.message);
+      } finally {
+         spinner.stop();
+      }
       console.log('로그인');
    };
 
@@ -46,7 +76,7 @@ const Signin = ({navigation}) => {
                placeholder="Email"
                returnKeyType="next"
                value={email}
-               onChangeText={setEmail}
+               onChangeText={_handleEmailChange}
                // 메일입력후에 Input.js 의 암호입력란으로 포커스를 자동으로 옮김
                onSubmitEditing={() => refPassword.current.focus()}
             />
@@ -56,10 +86,11 @@ const Signin = ({navigation}) => {
                placeholder="Password"
                returnKeyType="done"
                value={password}
-               onChangeText={setPassword}
+               onChangeText={_handlePasswordChange}
                isPassword={true}
                onSubmitEditing={_handleSigninBtnPress}
             />
+            <ErrorMessage message="" />
             <TButton title="로그인" onPress={_handleSigninBtnPress} />
             <TButton
                title="회원가입"
@@ -75,6 +106,16 @@ const Signin = ({navigation}) => {
 export default Signin;
 
 /*
+import React, { useContext, useState, useRef, useEffect } from 'react';
+import { ThemeContext } from 'styled-components/native';
+import styled from 'styled-components/native';
+import { Button, Image, Input, ErrorMessage } from '../components';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { signin } from '../firebase';
+import { Alert } from 'react-native';
+import { validateEmail, removeWhitespace } from '../utils';
+import { UserContext, ProgressContext } from '../contexts';
 
 const Container = styled.View`
   flex: 1;
