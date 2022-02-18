@@ -39,7 +39,7 @@ const Signin = ({navigation}) => {
    // TButton 의 활성화 여부를 결정하는 disabled 상태변수의 값을 변경
    useEffect(() => {
       setDisabled(!(email && password && !errorMessage));
-      console.log(disabled);
+      //console.log(disabled);
    }, [email, password, errorMessage]);
 
    // 입력된 이메일주소내 공백제거
@@ -60,7 +60,7 @@ const Signin = ({navigation}) => {
       try {
          // spinner.start();
          const {user} = await signInWithEmailAndPassword(auth, email, password);
-         console.log('333333 ', user);
+         //console.log('333333 ', user);
          navigation.navigate('Profile', {user});
          // setUser(user);
       } catch (e) {
@@ -68,7 +68,7 @@ const Signin = ({navigation}) => {
       } finally {
          spinner.stop();
       }
-      console.log('로그인');
+      //console.log('로그인');
    };
 
    return (
@@ -84,7 +84,7 @@ const Signin = ({navigation}) => {
                returnKeyType="next"
                value={email}
                onChangeText={_handleEmailChange}
-               // 메일입력후에 Input.js 의 암호입력란으로 포커스를 자동으로 옮김
+               // 메일입력후 다음버튼누르면 Input.js 의 암호입력란으로 포커스를 자동으로 옮김
                onSubmitEditing={() => refPassword.current.focus()}
             />
             <ErrorMessage message={errorMessage} />
