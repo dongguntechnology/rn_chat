@@ -72,7 +72,7 @@ const PImage = ({url, showButton, onChangePhoto}) => {
          onChangePhoto(result.uri);
       }
 
-      console.log(result);
+      //console.log(result);
       // Object {
       //    "cancelled": false,
       //    "height": 2580,

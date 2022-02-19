@@ -2,7 +2,7 @@ import React, {useContext, useState} from 'react';
 import styled from 'styled-components/native';
 import {Alert} from 'react-native';
 import {TButton, PImage, Input} from '../components';
-// import {UserContext} from '../contexts';
+import {UserContext} from '../contexts';
 // import {ProgressContext} from '../contexts';
 // import {ThemeContext} from 'styled-components/native';
 // import {getCurrentUser, updateUserInfo, signout} from '../firebase';
@@ -16,13 +16,11 @@ const Container = styled.View`
 `;
 
 const Profile = ({navigation, route}) => {
-   console.log(route.params);
+   //console.log(route.params);
+   const {setUser} = useContext(UserContext);
    return (
       <Container>
-         <TButton
-            title="로그아웃"
-            onPress={() => navigation.navigate('Signin')}
-         />
+         <TButton title="로그아웃" onPress={() => setUser({})} />
       </Container>
    );
 };

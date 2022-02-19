@@ -8,7 +8,7 @@ import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
 import {app} from '../firebase';
 import {TButton, PImage, Input, ErrorMessage} from '../components';
 import {validateEmail, removeWhitespace} from '../utils';
-// import { UserContext, ProgressContext } from '../contexts';
+import {UserContext, ProgressContext} from '../contexts'; //
 
 // auth 생성
 const auth = getAuth(app);
@@ -29,6 +29,8 @@ const LOGO =
 const Signin = ({navigation}) => {
    const insets = useSafeAreaInsets();
    const theme = useContext(ThemeContext);
+   const {setUser} = useContext(UserContext); // setUser 로 사용자정보를 업데이트함
+   const {spinner} = useContext(ProgressContext); // spinner 호출
 
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
@@ -58,15 +60,15 @@ const Signin = ({navigation}) => {
 
    const _handleSigninBtnPress = async () => {
       try {
-         // spinner.start();
+         spinner.start();
          const {user} = await signInWithEmailAndPassword(auth, email, password);
          //console.log('333333 ', user);
          navigation.navigate('Profile', {user});
-         // setUser(user);
+         setUser(user); // 로그인성공시 setUser 기능으로 사용자정보를 업데이트함
       } catch (e) {
          Alert.alert('Signin Error', e.message);
       } finally {
-         spinner.stop();
+         spinner.stop(); // 로그인실패여부와 상관없이  spinner 스톱
       }
       //console.log('로그인');
    };

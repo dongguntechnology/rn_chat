@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useContext} from 'react';
 import styled from 'styled-components/native';
 import {TButton, PImage, Input, ErrorMessage} from '../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -12,9 +12,8 @@ import {
 import {getDownloadURL, getStorage, ref, uploadBytes} from 'firebase/storage';
 import app from '../firebase';
 import {validateEmail, removeWhitespace} from '../utils';
-
+import {UserContext, ProgressContext} from '../contexts';
 // import { signin } from '../firebase';
-// import { UserContext, ProgressContext } from '../contexts';
 
 const auth = getAuth(app);
 
@@ -60,6 +59,9 @@ const DEFAULT_PHOTO =
    'https://firebasestorage.googleapis.com/v0/b/rn-chat-aba36.appspot.com/o/face.png?alt=media';
 
 const Signup = ({navigation}) => {
+   const {setUser} = useContext(UserContext);
+   const {spinner} = useContext(ProgressContext);
+
    const [photo, setPhoto] = useState(DEFAULT_PHOTO);
    // DEFAULT_PHOTO = PImage.defaultProps
    const [name, setName] = useState('');
@@ -106,14 +108,14 @@ const Signup = ({navigation}) => {
 
    const _handleSignupBtnPress = async () => {
       try {
-         //spinner.start();
+         spinner.start();
          const user = await DB_signup({name, email, password, photo});
          navigation.navigate('Profile', {user});
-         // setUser(user);
+         setUser(user); // 회원가입 성공 후 setUser 기능으로 사용자정보를 업데이트함
       } catch (e) {
          Alert.alert('Signup Error', e.message);
       } finally {
-         //spinner.stop();
+         spinner.stop();
       }
    };
 
