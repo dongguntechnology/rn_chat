@@ -11,7 +11,7 @@ const Navigation = () => {
    return (
       <NavigationContainer>
          {/* 로그인상태에 따라 Main 또는 Auth 화면으로 변경하기 */}
-         {user.uid ? <Main /> : <Auth />}
+         {!user.uid ? <Main /> : <Auth />}
          {inProgress && <Spinner />}
       </NavigationContainer>
    );
