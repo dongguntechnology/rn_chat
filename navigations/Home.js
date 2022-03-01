@@ -20,7 +20,7 @@ const TabIcon = ({name, focused}) => {
 const Tab = createBottomTabNavigator();
 
 const Home = ({navigation, route}) => {
-   console.log(route);
+   //console.log(route);
    useEffect(() => {
       const screenName = getFocusedRouteNameFromRoute(route) || 'List';
       navigation.setOptions({
