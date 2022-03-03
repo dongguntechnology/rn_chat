@@ -1,19 +1,48 @@
 import React, {useContext, useState} from 'react';
 import styled from 'styled-components/native';
 import {Alert} from 'react-native';
+import {getAuth, signOut, updateProfile} from 'firebase/auth';
+import {getDownloadURL, getStorage, ref, uploadBytes} from 'firebase/storage';
+import app from '../firebase';
 import {TButton, PImage, Input} from '../components';
 import {UserContext} from '../contexts';
-import {app} from '../firebase';
-import {getAuth} from 'firebase/auth';
-// import {ProgressContext} from '../contexts';
-// import {ThemeContext} from 'styled-components/native';
-// import {getCurrentUser, updateUserInfo, signout} from '../firebase';
+import {ProgressContext} from '../contexts';
+import {ThemeContext} from 'styled-components/native';
 
 const auth = getAuth(app);
 
 const getCurrentUser = () => {
    const {uid, displayName, email, photoURL} = auth.currentUser;
    return {uid, name: displayName, email, photo: photoURL};
+};
+
+const updateUserInfo = async (photo) => {
+   const photoURL = await uploadImage(photo);
+   await updateProfile(auth.currentUser, {photoURL});
+   return photoURL;
+};
+
+const signout = async () => {
+   await signOut(auth);
+   return {};
+};
+
+const uploadImage = async (uri) => {
+   if (uri.startsWith('https')) {
+      return uri;
+   }
+
+   const response = await fetch(uri);
+   const blob = await response.blob();
+
+   const {uid} = auth.currentUser;
+   const storage = getStorage(app);
+   const storageRef = ref(storage, `/Profile/${uid}/photo.png`);
+   await uploadBytes(storageRef, blob, {
+      contentType: 'image/png',
+   });
+
+   return await getDownloadURL(storageRef);
 };
 
 const Container = styled.View`
@@ -26,16 +55,45 @@ const Container = styled.View`
 
 const Profile = ({navigation, route}) => {
    //console.log(route.params);
+   const {spinner} = useContext(ProgressContext);
    const {setUser} = useContext(UserContext);
    const user = getCurrentUser();
    const [photo, setPhoto] = useState(user.photo);
-   console.log(disabled);
+   const theme = useContext(ThemeContext);
+
+   const _handlePhotoChange = async (url) => {
+      try {
+         spinner.start();
+         const photoURL = await updateUserInfo(url);
+         setPhoto(photoURL);
+      } catch (e) {
+         Alert.alert('Photo Error', e.message);
+      } finally {
+         spinner.stop();
+      }
+   };
+
    return (
       <Container>
-         <PImage showButton url={photo} />
+         <PImage showButton url={photo} onChangePhoto={_handlePhotoChange} />
          <Input label="Name" value={user.name} disabled />
          <Input label="Email" value={user.email} disabled />
-         <TButton title="로그아웃" onPress={() => setUser({})} />
+         <TButton
+            title="로그아웃"
+            onPress={async () => {
+               try {
+                  spinner.start();
+                  await signout();
+               } catch (e) {
+               } finally {
+                  setUser({});
+                  spinner.stop();
+               }
+            }}
+            containerStyle={{
+               backgroundColor: theme.btnSignout,
+            }}
+         />
       </Container>
    );
 };
