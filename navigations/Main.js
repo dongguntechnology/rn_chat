@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {ThemeContext} from 'styled-components/native';
-import {Profile, Channel, ChannelCreation, ChannelList} from '../screens';
+import {Channel, ChannelCreation} from '../screens';
 import Home from './Home';
 
 const Stack = createStackNavigator();
@@ -18,7 +18,7 @@ const Main = () => {
          }}
       >
          <Stack.Screen name="Home" component={Home} />
-         <Stack.Screen name="채널생성" component={ChannelCreation} />
+         <Stack.Screen name="ChannelCreation" component={ChannelCreation} />
          <Stack.Screen name="Channel" component={Channel} />
       </Stack.Navigator>
    );
