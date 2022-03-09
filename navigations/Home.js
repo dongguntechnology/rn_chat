@@ -26,6 +26,7 @@ const Home = ({navigation, route}) => {
       navigation.setOptions({
          headerTitle: screenName,
          headerRight: () =>
+            //  화면의 이름이 List 일때만 아이콘이 보여짐
             screenName === 'List' && (
                <MaterialIcons
                   name="add"
