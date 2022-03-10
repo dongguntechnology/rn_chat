@@ -5,13 +5,21 @@ import {MaterialIcons} from '@expo/vector-icons';
 import {
    getFirestore,
    collection,
+   doc,
    onSnapshot,
    query,
    orderBy,
 } from 'firebase/firestore';
-//import moment from 'moment';
+import moment from 'moment'; // 시간관련 라이브러리
 import {app} from '../firebase';
 const db = getFirestore(app);
+
+const getDateOrTime = (ts) => {
+   const now = moment().startOf('day'); // 현재시간
+   const target = moment(ts).startOf('day'); // 전달된시간
+   return moment(ts).format(now.diff(target, 'day') > 0 ? 'MM/DD' : 'HH:mm');
+   // 날자가 서로다르면 월일이 표시되고, 날자가 같으면 시분이 표시되게 함
+};
 
 const Container = styled.View`
    flex: 1;
@@ -58,18 +66,6 @@ const ItemIcon = styled(MaterialIcons).attrs(({theme}) => ({
    color: theme.itemIcon,
 }))``;
 
-let channels = [];
-
-// const [channels, setChannels] = useState([]);
-for (let i = 0; i < 1000; i++) {
-   channels.push({
-      id: i,
-      title: `title: ${i}`,
-      description: `desc: ${i}`,
-      createdAt: i,
-   });
-}
-
 const Item = React.memo(
    ({item: {id, title, description, createdAt}, onPress}) => {
       console.log(id);
@@ -79,7 +75,7 @@ const Item = React.memo(
                <ItemTitle>{title}</ItemTitle>
                <ItemDesc>{description}</ItemDesc>
             </ItemTextContainer>
-            <ItemTime>{createdAt}</ItemTime>
+            <ItemTime>{getDateOrTime(createdAt)}</ItemTime>
             <ItemIcon />
          </ItemContainer>
       );
@@ -87,6 +83,23 @@ const Item = React.memo(
 );
 
 const ChannelList = ({navigation}) => {
+   const [channels, setChannels] = useState([]);
+
+   useEffect(() => {
+      const collectionQuery = query(
+         collection(db, 'channels'),
+         orderBy('createdAt', 'desc')
+      );
+      const unsubscribe = onSnapshot(collectionQuery, (snapshot) => {
+         const list = [];
+         snapshot.forEach((doc) => {
+            list.push(doc.data());
+         });
+         setChannels(list);
+      });
+      return () => unsubscribe(); // 디비중복호출방지
+   }, []);
+
    return (
       <Container>
          <FlatList

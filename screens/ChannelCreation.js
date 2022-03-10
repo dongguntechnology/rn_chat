@@ -99,8 +99,7 @@ const ChannelCreation = ({navigation}) => {
             <TButton
                title="채널생성"
                disabled={disabled}
-               onPress={() => navigation.replace('Channel')}
-               onChangeText={_handleDescChange}
+               onPress={_handleCreateBtnPress}
             />
          </Container>
       </KeyboardAwareScrollView>
