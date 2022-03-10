@@ -8,12 +8,16 @@ import {
    onSnapshot,
    query,
    doc,
+   setDoc,
    orderBy,
 } from 'firebase/firestore';
 import {app} from '../firebase';
+import {Input} from '../components';
+
 //import {GiftedChat, Send} from 'react-native-gifted-chat';
 //import {createMessage, getCurrentUser} from '../firebase';
 
+const db = getFirestore(app);
 const Container = styled.View`
    flex: 1;
    background-color: ${({theme}) => theme.background};
@@ -23,12 +27,26 @@ const StyledText = styled.Text`
    font-size: 30px;
 `;
 
+const createMessage = async ({channelId, message}) => {
+   const collection_Ref = collection(db, `channels/${channelId}/messages`);
+   await setDoc(doc(collection_Ref, message._id), {
+      ...message,
+      createdAt: Date.now(),
+   });
+};
+
 const Channel = ({route}) => {
+   const [message, setMessage] = useState([]);
    return (
       <Container>
          <StyledText>채널</StyledText>
-         <StyledText>{route.params.id}</StyledText>
-         <StyledText>{route.params.title}</StyledText>
+         <Input
+            value={message}
+            onChangeText={setMessage}
+            onSubmitEditing={() =>
+               createMessage({channelId: route.params.id, message})
+            }
+         />
       </Container>
    );
 };
