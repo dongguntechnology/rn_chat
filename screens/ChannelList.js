@@ -58,7 +58,9 @@ const ItemIcon = styled(MaterialIcons).attrs(({theme}) => ({
    color: theme.itemIcon,
 }))``;
 
-const [channels, setChannels] = useState([]);
+let channels = [];
+
+// const [channels, setChannels] = useState([]);
 for (let i = 0; i < 1000; i++) {
    channels.push({
       id: i,
@@ -68,19 +70,21 @@ for (let i = 0; i < 1000; i++) {
    });
 }
 
-const Item = ({item: {id, title, description, createdAt}, onPress}) => {
-   console.log(id);
-   return (
-      <ItemContainer onPress={() => onPress({id, title})}>
-         <ItemTextContainer>
-            <ItemTitle>{title}</ItemTitle>
-            <ItemDesc>{description}</ItemDesc>
-         </ItemTextContainer>
-         <ItemTime>{getDateOrTime(createdAt)}</ItemTime>
-         <ItemIcon />
-      </ItemContainer>
-   );
-};
+const Item = React.memo(
+   ({item: {id, title, description, createdAt}, onPress}) => {
+      console.log(id);
+      return (
+         <ItemContainer onPress={() => onPress({id, title})}>
+            <ItemTextContainer>
+               <ItemTitle>{title}</ItemTitle>
+               <ItemDesc>{description}</ItemDesc>
+            </ItemTextContainer>
+            <ItemTime>{createdAt}</ItemTime>
+            <ItemIcon />
+         </ItemContainer>
+      );
+   }
+);
 
 const ChannelList = ({navigation}) => {
    return (
