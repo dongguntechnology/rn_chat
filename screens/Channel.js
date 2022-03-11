@@ -29,9 +29,11 @@ const StyledText = styled.Text`
 
 const createMessage = async ({channelId, message}) => {
    const collection_Ref = collection(db, `channels/${channelId}/messages`);
-   await setDoc(doc(collection_Ref, message._id), {
-      ...message,
-      createdAt: Date.now(),
+   const now = Date.now();
+   await setDoc(doc(collection_Ref, now), {
+      id: now,
+      text: message,
+      createdAt: now,
    });
 };
 
