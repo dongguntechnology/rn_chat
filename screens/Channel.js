@@ -2,6 +2,7 @@ import React, {useState, useEffect, useLayoutEffect} from 'react';
 import styled from 'styled-components/native';
 import {Alert} from 'react-native';
 import {MaterialIcons} from '@expo/vector-icons';
+import {getAuth} from 'firebase/auth';
 import {
    getFirestore,
    collection,
@@ -11,11 +12,16 @@ import {
    setDoc,
    orderBy,
 } from 'firebase/firestore';
+import {GiftedChat} from 'react-native-gifted-chat';
 import {app} from '../firebase';
 import {Input} from '../components';
 
-//import {GiftedChat, Send} from 'react-native-gifted-chat';
-//import {createMessage, getCurrentUser} from '../firebase';
+const auth = getAuth(app);
+
+const getCurrentUser = () => {
+   const {uid, displayName, email, photoURL} = auth.currentUser;
+   return {uid, name: displayName, email, photo: photoURL};
+};
 
 const db = getFirestore(app);
 const Container = styled.View`
@@ -40,15 +46,31 @@ const createMessage = async ({channelId, message}) => {
 
 const Channel = ({route}) => {
    const [message, setMessage] = useState([]);
+   const {uid, name, photo} = getCurrentUser();
+
+   const _handleMessageSend = (message) => {
+      console.log(message);
+      // const message = messageList[0];
+      // try {
+      //    await createMessage({channelId: route.params.id, message});
+      // } catch (e) {
+      //    Alert.alert('Message Error', e.message);
+      // }
+   };
+
    return (
       <Container>
          <StyledText>채널</StyledText>
-         <Input
-            value={message}
-            onChangeText={setMessage}
-            onSubmitEditing={() =>
-               createMessage({channelId: route.params.id, message})
-            }
+         <GiftedChat
+            placeholder="Enter a message ..."
+            messages={messages}
+            user={{_id: uid, name, avatar: photo}}
+            onSend={_handleMessageSend}
+            // renderSend={(props) => <SendButton {...props} />}
+            // scrollToBottom={true}
+            // renderUsernameOnMessage={true}
+            // alwaysShowSend={true}
+            // multiline={false}
          />
       </Container>
    );
