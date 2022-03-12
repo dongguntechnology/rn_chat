@@ -30,8 +30,9 @@ const StyledText = styled.Text`
 const createMessage = async ({channelId, message}) => {
    const collection_Ref = collection(db, `channels/${channelId}/messages`);
    const now = Date.now();
-   await setDoc(doc(collection_Ref, now), {
-      id: now,
+   // doc함수의 path 파라미터의 타입은 문자열
+   await setDoc(doc(collection_Ref, now.toString()), {
+      id: now.toString(),
       text: message,
       createdAt: now,
    });
